@@ -1,0 +1,95 @@
+# SORTING ALGORITHM PERFORMANCE ANALYSIS REPORT
+
+## 1. INTRODUCTION
+This report presents an in-depth analysis of various sorting algorithms' performance characteristics across different input distributions. We implemented and tested eight sorting algorithms: Bubble Sort, Insertion Sort, Merge Sort, Quick Sort (with three pivot selection strategies), Heap Sort, and Radix Sort. The goal was to empirically validate theoretical time complexities and understand how input distributions affect algorithm performance.
+
+## 2. METHODOLOGY
+
+### 2.1. Experimental Setup
+- **Hardware**: All experiments were conducted on the same machine to ensure consistency.
+- **Implementation**: All algorithms were implemented in C programming language.
+- **Metrics Measured**: 
+  - Execution time (nanoseconds)
+  - Number of comparisons
+  - Efficiency (nanoseconds per comparison)
+- **Array Types**: Three distinct input distributions were tested:
+  - Ascending arrays (already sorted)
+  - Descending arrays (reverse sorted)
+  - Random arrays (randomly distributed integers)
+- **Array Sizes**: We tested with array sizes ranging from 1,000 to 10,000 elements, incrementing by 1,000.
+- **Repetitions**: Each algorithm was tested once per array size as the results were consistent across multiple test runs.
+
+### 2.2. Algorithms Tested
+
+| Algorithm | Expected Time Complexity (Best) | Expected Time Complexity (Average) | Expected Time Complexity (Worst) |
+|-----------|--------------------------------|-----------------------------------|----------------------------------|
+| Bubble Sort | O(n) | O(n²) | O(n²) |
+| Insertion Sort | O(n) | O(n²) | O(n²) |
+| Merge Sort | O(n log n) | O(n log n) | O(n log n) |
+| Quick Sort (First Element) | O(n log n) | O(n log n) | O(n²) |
+| Quick Sort (Random Element) | O(n log n) | O(n log n) | O(n log n) on average |
+| Quick Sort (Median of Three) | O(n log n) | O(n log n) | O(n log n) on average |
+| Heap Sort | O(n log n) | O(n log n) | O(n log n) |
+| Radix Sort | O(nk) | O(nk) | O(nk) |
+
+## 3. RESULTS AND ANALYSIS
+
+### 3.1. Performance on Ascending Arrays (Already Sorted)
+
+Bubble Sort and Insertion Sort performed exceptionally well on already sorted arrays, approaching their best-case O(n) time complexity. Bubble Sort only needs to scan the array once to confirm it's sorted, requiring O(n) comparisons. Similarly, Insertion Sort makes comparisons but performs no shifts, resulting in O(n) behavior.
+
+Quick Sort with the first element as pivot demonstrated worst-case O(n²) behavior on ascending arrays as expected. This occurs because each partition is maximally unbalanced with the pivot always being the smallest element, creating n levels of recursion with an average of n/2 comparisons at each level.
+
+Merge Sort, Heap Sort, and Radix Sort maintained their O(n log n) or O(nk) complexities regardless of the input distribution, demonstrating their stability regardless of input conditions.
+
+Quick Sort with random pivot and median-of-three pivot strategies effectively avoided the worst-case behavior seen with the first-element pivot strategy, maintaining O(n log n) performance even on sorted arrays.
+
+### 3.2. Performance on Descending Arrays (Reverse Sorted)
+
+On descending arrays, Bubble Sort and Insertion Sort showed worst-case O(n²) behavior as expected. Each element in these algorithms must traverse the entire sorted portion, resulting in a large number of comparisons and swaps.
+
+Quick Sort with first element as pivot again exhibited worst-case O(n²) performance, but for the opposite reason as with ascending arrays. With descending arrays, the pivot (first element) is always the largest element, creating maximally unbalanced partitions.
+
+Quick Sort with random pivot and median-of-three strategies again proved effective, maintaining O(n log n) performance by avoiding the pathological cases.
+
+Merge Sort, Heap Sort, and Radix Sort maintained their expected time complexities regardless of the input distribution.
+
+### 3.3. Performance on Random Arrays
+
+With random arrays, all algorithms performed according to their average-case complexities. Bubble Sort and Insertion Sort showed O(n²) behavior, while Merge Sort, Quick Sort variants, Heap Sort, and Radix Sort all demonstrated O(n log n) or O(nk) performance.
+
+Quick Sort variants performed particularly well on random arrays, with random pivot and median-of-three strategies showing slightly better constants than the first-element strategy.
+
+### 3.4. Comparison Count Analysis
+
+Our comparison count measurements confirmed theoretical expectations:
+- Bubble Sort and Insertion Sort consistently made O(n²) comparisons for random and descending arrays, and O(n) comparisons for ascending arrays.
+- Merge Sort made approximately n log n comparisons across all input types, showing remarkable consistency.
+- Quick Sort variants showed varying comparison counts depending on pivot strategy and input distribution.
+- Heap Sort consistently required approximately 2n log n comparisons across input distributions.
+- Radix Sort made only O(n) comparisons since its performance depends on digit operations rather than element comparisons.
+
+### 3.5. Efficiency Analysis (Time per Comparison)
+
+The efficiency metric (time per comparison) revealed interesting insights about the algorithms' implementation overhead:
+- Radix Sort showed the highest time per comparison since it performs fewer comparisons but more digit operations.
+- Merge Sort had moderate efficiency due to array copying overhead.
+- Quick Sort variants showed good efficiency, particularly with random and median-of-three pivots.
+- Heap Sort showed consistent efficiency across input distributions.
+- Bubble Sort and Insertion Sort showed the lowest time per comparison, indicating low overhead per comparison operation.
+
+## 4. CONCLUSIONS
+
+1. **Input Distribution Matters**: The performance of comparison-based sorting algorithms can vary dramatically based on input distribution, particularly for Quick Sort with non-randomized pivot selection.
+
+2. **Pivot Selection is Critical**: For Quick Sort, the choice of pivot significantly affects performance across different input distributions. Random and median-of-three pivot strategies effectively avoid worst-case performance.
+
+3. **Algorithm Selection Guidelines**:
+   - For small arrays or nearly sorted data, Insertion Sort is often the best choice.
+   - For general-purpose sorting with unknown input distributions, Merge Sort or Quick Sort with randomized pivot provide reliable performance.
+   - When comparing execution time alone, properly implemented Quick Sort variants often outperform other O(n log n) algorithms by small constants.
+   - Radix Sort can outperform comparison-based sorts for integer data with a limited range.
+
+4. **Theoretical vs. Empirical Performance**: Our experiments largely confirmed theoretical time complexities, but also highlighted the importance of considering constant factors and implementation overhead when choosing sorting algorithms for practical applications.
+
+These findings underscore the importance of understanding both the theoretical complexity and practical behavior of sorting algorithms under different conditions when making implementation choices for real-world applications.
